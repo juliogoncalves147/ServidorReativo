@@ -17,6 +17,10 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
         this.n = n;
         this.maxSeqNumbers = new int[n];
         this.queue = new ArrayDeque<>();
+
+        for (int i = 0; i < n; i++) {
+            maxSeqNumbers[i] = 0;
+        }
     }
 
     @Override
@@ -29,7 +33,7 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
                 // verifica se a mensagem pode ser entregue
                 boolean canDeliver = true;
                 for (int i = 0; i < n; i++) {
-                    if (m.v[i] > maxSeqNumbers[i] + 1) {
+                    if (i != m.j && m.v[i] > maxSeqNumbers[i]) {
                         canDeliver = false;
                         break;
                     }
@@ -38,27 +42,36 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
                 if (canDeliver) {
                     // mensagem pode ser entregue, passa para baixo e atualiza o vetor de números de sequência
                     down.onNext(m.payload);
+                    System.out.println("Mandei logo a seguir a receber: " + m.payload);
                     for (int i = 0; i < n; i++) {
+                    //    System.out.println("Antes - maxSeqNumbers[" + i + "] = " + maxSeqNumbers[i]);
                         maxSeqNumbers[i] = Math.max(maxSeqNumbers[i], m.v[i]);
+                    //    System.out.println("Depois - maxSeqNumbers[" + i + "] = " + maxSeqNumbers[i]);
                     }
-                
+                    System.out.println("maxSeqNumbers = " + maxSeqNumbers[0] + ", " + maxSeqNumbers[1]);
+                    
                     // verifica se há mensagens na fila de espera que podem ser entregues agora
                     while (!queue.isEmpty()) {
                         CausalMessage<T> queuedMsg = queue.peek();
                         boolean canDeliverQueuedMsg = true;
+                        
                         for (int i = 0; i < n; i++) {
-                            if (queuedMsg.v[i] > maxSeqNumbers[i] + 1) {
+                            if (queuedMsg.v[i] > maxSeqNumbers[i]) {
                                 canDeliverQueuedMsg = false;
+                                System.out.println("Não mandei da Fila de Espera: " + queue.peek().payload);
+                                System.out.println("queuedMsg.v[" + i + "] = " + queuedMsg.v[i] + " > maxSeqNumbers[" + i + "]= " + (maxSeqNumbers[i]));
                                 break;
                             }
                         }
                     
                         if (canDeliverQueuedMsg) {
                             // mensagem na fila pode ser entregue, passa para baixo e atualiza o vetor de números de sequência
+                            System.out.println("Mandei da Fila de Espera: " + queue.peek().payload);
                             down.onNext(queue.poll().payload);
                             for (int i = 0; i < n; i++) {
                                 maxSeqNumbers[i] = Math.max(maxSeqNumbers[i], queuedMsg.v[i]);
                             }
+                            System.out.println("maxSeqNumbers = " + maxSeqNumbers[0] + ", " + maxSeqNumbers[1]);
                         } else {
                             // mensagem na fila não pode ser entregue agora, pare de verificar a fila
                             break;
