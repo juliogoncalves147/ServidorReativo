@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class CausalOpTest {
-    /* 
+    
     @Test
     public void testOk() {
         var l = Observable.just(
@@ -18,7 +18,7 @@ public class CausalOpTest {
 
         Assert.assertArrayEquals(l.toArray(), new String[]{"a","b","c"});
     }
-    */
+    
     
     @Test
     public void testReorder() {
@@ -32,7 +32,7 @@ public class CausalOpTest {
                 
         Assert.assertArrayEquals(l.toArray(), new String[]{"a","b","c"});
     }
-    /*
+    
     @Test
     public void testDupl() {
         var l = Observable.just(
@@ -54,5 +54,5 @@ public class CausalOpTest {
                 .lift(new CausalOperator<String>(2))
                 .toList().blockingGet();
     }
-    */
+    
 }

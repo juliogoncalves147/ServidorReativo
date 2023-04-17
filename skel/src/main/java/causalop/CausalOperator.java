@@ -108,7 +108,9 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
 
             @Override
             public void onComplete() {
-                down.onComplete(); // FIXME
+                if(!queue.isEmpty())
+                    onError(new IllegalArgumentException("Gap detected"));
+                down.onComplete();
             }
         };
     }
