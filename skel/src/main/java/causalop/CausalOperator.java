@@ -52,6 +52,11 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
                 System.out.println("Recebi mensagem " + m.payload + " de " + m.j + " com v = " + m.v[0] + ", " + m.v[1]);
                 // verifica se a mensagem pode ser entregue
                 int canDeliver = receiveVerify(m.v, m.j);
+
+                if(queue.contains(m)){
+                    System.out.println("Mensagem já está na fila de espera: " + m.payload);
+                    return;
+                }
             
                 if (canDeliver==0) {
                     // mensagem pode ser entregue, passa para baixo e atualiza o vetor de números de sequência
@@ -103,7 +108,7 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
 
             @Override
             public void onError(@NonNull Throwable e) {
-                down.onError(e); // FIXME
+                down.onError(e);
             }
 
             @Override
