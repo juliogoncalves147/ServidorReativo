@@ -1,0 +1,32 @@
+a) mensagem ja na fila : $
+b) mensagem é enviada logo apos ser recebida : x
+c) mensagem da fila é enviada : x
+d) mensagem da fila é enviada de seguida : x
+e) mensagem ja devia ter sido entregue : §
+f) mensagem da fila ja devia ter sido entregue : £
+g) mensagem fica por enviar %
+
+h) v[j] > max[j]+1 : x
+i) v[j] < max[j]+1 : 
+j) v[i] > max[i]   : x
+k) v[i] = max[i]   : x
+l) v[i] < max[i]   : x
+
+2 , 2 , 3
+
+"c" 0 , 2 , 0 : 1 (h)
+"$" 0 , 2 , 0 : 1 (a)
+"a" 1 , 0 , 0 : 0 (b)(k)
+"b" 0 , 1 , 0 : 1 (c)(l)
+"g" 2 , 2 , 3 : 0 (d)(j)
+"f" 1 , 2 , 3 : 2 (d)
+"e" 1 , 1 , 2 : 2 (c)
+"£" 0 , 2 , 3 : 2 (f)
+"d" 1 , 1 , 1 : 2 
+"§" 0 , 0 , 1 : 2 (e)
+"%" 2 , 2 , 5 : 2 (g)
+
+
+
+
+ 

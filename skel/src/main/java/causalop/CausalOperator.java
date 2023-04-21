@@ -97,9 +97,7 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
                     down.onNext(m.payload);
                     System.out.println("Mandei logo a seguir a receber: " + m.payload);
                     // atualiza o vetor de números de sequência
-                    for (int i = 0; i < n; i++) {
-                        maxSeqNumbers[i] = Math.max(maxSeqNumbers[i], m.v[i]);
-                    }
+                    maxSeqNumbers[m.j] +=1;
                     sV = printV(maxSeqNumbers);
                     System.out.println("maxSeqNumbers = " + sV);
                     
@@ -107,9 +105,7 @@ public class CausalOperator<T> implements ObservableOperator<T, CausalMessage<T>
                     while((m = checkQueue())!=null) {
                         System.out.println("Mandei da fila de espera: " + m.payload);
                         down.onNext(m.payload);
-                        for (int i = 0; i < n; i++) {
-                            maxSeqNumbers[i] = Math.max(maxSeqNumbers[i], m.v[i]);
-                        }
+                        maxSeqNumbers[m.j] +=1;
                         sV = printV(maxSeqNumbers);
                         System.out.println("maxSeqNumbers = " + sV);
                     }
