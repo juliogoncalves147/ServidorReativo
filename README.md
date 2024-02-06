@@ -1,2 +1,3 @@
-# ServidorReativo
-Implementação de um Servidor Reativo com Ordenação Causal de Mensagens
+# Reactive Server
+Implementation of a Reactive Server with Causal Message Ordering
+Java && Erlang
